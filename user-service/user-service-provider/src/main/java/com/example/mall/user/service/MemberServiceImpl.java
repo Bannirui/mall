@@ -1,5 +1,6 @@
 package com.example.mall.user.service;
 
+import com.example.mall.user.dal.service.MemberDalService;
 import com.example.mall.user.request.AvatarUpdateRequest;
 import com.example.mall.user.request.QueryMemberRequest;
 import com.example.mall.user.request.UpdateMemberRequest;
@@ -7,6 +8,7 @@ import com.example.mall.user.response.AvatarUpdateResponse;
 import com.example.mall.user.response.QueryMemberResponse;
 import com.example.mall.user.response.UpdateMemberResponse;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *@author dingrui
@@ -15,6 +17,10 @@ import org.apache.dubbo.config.annotation.DubboService;
  */
 @DubboService
 public class MemberServiceImpl implements IMemberService {
+
+    @Autowired
+    private MemberDalService memberDalService;
+
     /**
      * @author dingrui
      * @date 2021/2/21

@@ -2,6 +2,7 @@ package com.example.mall.user.dal.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.mall.user.dal.model.UserVerify;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.example.mall.user.dal.model.UserVerify;
  * @author dingrui
  * @since 2021-02-20
  */
+@Mapper
 public interface UserVerifyMapper extends BaseMapper<UserVerify> {
 
 }
