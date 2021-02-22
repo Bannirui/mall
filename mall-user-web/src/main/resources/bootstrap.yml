@@ -1,0 +1,24 @@
+server:
+  port: 14001
+nacos:
+  port: 8848
+  service-address: 127.0.0.1
+  # name space id
+  namespace: ca7de149-1f97-4661-ab3f-484815f2e20e
+spring:
+  application:
+    name: mall-user-web
+  cloud:
+    nacos:
+      discovery:
+        # nacos注册地址
+        server-addr: ${nacos.service-address}:${nacos.port}
+        namespace: ${nacos.namespace}
+      config:
+        # 主配置服务器地址
+        server-addr: ${nacos.service-address}:${nacos.port}
+        # 指定GroupId 默认可以不用填写
+        group: mall
+        namespace: ${nacos.namespace}
+        # 主配置 配置文件类型
+        file-extension: yaml

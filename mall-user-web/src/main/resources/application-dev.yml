@@ -1,0 +1,7 @@
+dubbo:
+  application:
+    name: ${spring.application.name}
+  registry:
+    address: nacos://127.0.0.1:8848?namespace=a4fb7fdd-b752-438a-bd66-75b9523d7633
+  protocol:
+    name: dubbo
