@@ -55,14 +55,14 @@ public class UserVerify implements Serializable {
     private String uuid;
 
     /**
-     * 是否验证：Y已验证，N为验证
+     * 是否验证：1已验证，0未验证
      */
     @TableField(value = "is_verify")
-    private String isVerify;
+    private Boolean isVerify;
 
     /**
-     * 是否过期：Y已过期，N为过期
+     * 是否过期：1已过期，0为过期
      */
     @TableField(value = "is_expire")
-    private String isExpire;
+    private Boolean isExpire;
 }

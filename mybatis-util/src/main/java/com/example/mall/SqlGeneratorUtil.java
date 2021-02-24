@@ -34,9 +34,9 @@ public class SqlGeneratorUtil {
         gc.setAuthor("dingrui");
 
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
-        gc.setControllerName("%sController");
-        gc.setServiceName("%sService");
-        gc.setServiceImplName("%sServiceImpl");
+        gc.setControllerName("%sDalController");
+        gc.setServiceName("%sDalService");
+        gc.setServiceImplName("%sDalServiceImpl");
         gc.setMapperName("%sMapper");
         gc.setXmlName("%sMapper");
         mpg.setGlobalConfig(gc);
@@ -58,7 +58,7 @@ public class SqlGeneratorUtil {
         strategy.setSuperServiceClass("");
         strategy.setSuperServiceImplClass("");
         strategy.setSuperMapperClass("");
-        strategy.setInclude("user_verify".split(","));
+        strategy.setInclude("address".split(","));
 
         mpg.setStrategy(strategy);
 

@@ -49,7 +49,7 @@ public class AddAddressRequest extends AbstractRequest {
     private String streetName;
 
     /**
-     * 默认地址
+     * 默认地址 是否是默认地址 1表示是 0表示不是
      */
-    private Integer isDefault;
+    private Boolean isDefault;
 }

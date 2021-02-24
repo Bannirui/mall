@@ -35,6 +35,14 @@ public class UserRegisterController {
     @DubboReference(timeout = 3000, check = false)
     private IUserRegisterService iUserRegisterService;
 
+    /**
+     * @author dingrui
+     * @date 2021/2/22
+     * @param dto
+     * @param request
+     * @return
+     * @description 用户注册
+     */
     @Anoymous
     @PostMapping("/register")
     public ResponseData<Object> register(@RequestBody @Validated RegisterRequest dto, HttpServletRequest request) {

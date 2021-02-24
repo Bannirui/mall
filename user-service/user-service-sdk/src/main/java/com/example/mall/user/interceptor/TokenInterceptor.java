@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TokenInterceptor implements HandlerInterceptor {
 
-    private static final String ACCESS_TOKEN = "access_token";
-    private static final String USER_INFO_KEY = "user_info";
+    public static final String ACCESS_TOKEN = "access_token";
+    public static final String USER_INFO_KEY = "user_info";
 
     @DubboReference(timeout = 3000)
     IUserLoginService iUserLoginService;

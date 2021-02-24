@@ -12,6 +12,13 @@
     <artifactId>common-tool</artifactId>
 
     <dependencies>
+        <!--本地模块-->
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>common-core</artifactId>
+        </dependency>
+        <!--本地模块-->
+
         <!--servlet-->
         <dependency>
             <groupId>javax.servlet</groupId>

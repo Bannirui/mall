@@ -12,7 +12,7 @@ public enum SysRetCodeEnum {
     // 系统公用
     SUCCESS(200, "成功"),
 
-    USERORPASSWORD_ERRROR(3001, "用户名或密码不正确"),
+    USER_OR_PASSWORD_ERRROR(3001, "用户名或密码不正确"),
     TOKEN_VALID_FAILED(3002, "token校验失败"),
     USERNAME_ALREADY_EXISTS(3003, "用户名已存在"),
     USER_REGISTER_FAILED(3004, "注册失败，请联系管理员"),
@@ -39,24 +39,16 @@ public enum SysRetCodeEnum {
     /**
      * 编码
      */
-    private Integer code;
+    private final Integer code;
 
     /**
      * 信息
      */
-    private String message;
+    private final String msg;
 
-    SysRetCodeEnum(Integer code, String message) {
+    SysRetCodeEnum(Integer code, String msg) {
         this.code = code;
-        this.message = message;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+        this.msg = msg;
     }
 
     /**
@@ -66,13 +58,13 @@ public enum SysRetCodeEnum {
      * @return
      * @description 根据编码获取信息
      */
-    public static String getMessageByCode(Integer code) {
+    public static String getMsgByCode(Integer code) {
         for (SysRetCodeEnum s : SysRetCodeEnum.values()) {
             if (null == code) {
                 break;
             }
             if (s.code.equals(code)) {
-                return s.message;
+                return s.msg;
             }
         }
         return null;

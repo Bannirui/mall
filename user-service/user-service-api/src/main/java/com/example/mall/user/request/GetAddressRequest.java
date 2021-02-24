@@ -22,7 +22,7 @@ public class GetAddressRequest extends AbstractRequest {
     /**
      * 用户id
      */
-    @NotNull(message = "用户id不能为空")
-    @Min(value = 1, message = "用户id无效")
-    private Long userId;
+    @NotNull(message = "地址id不能为空")
+    @Min(value = 1, message = "地址id无效")
+    private Long addressId;
 }

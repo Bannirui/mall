@@ -18,32 +18,28 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for tb_address
+-- Table structure for address
 -- ----------------------------
-DROP TABLE IF EXISTS `tb_address`;
-CREATE TABLE `tb_address`
+CREATE TABLE if not exists `address`
 (
-    `address_id`  bigint(20) NOT NULL AUTO_INCREMENT,
-    `user_id`     bigint(20)   DEFAULT NULL,
-    `user_name`   varchar(255) DEFAULT NULL,
-    `tel`         varchar(255) DEFAULT NULL,
-    `street_name` varchar(255) DEFAULT NULL,
-    `is_default`  tinyint(1)   DEFAULT NULL,
-    PRIMARY KEY (`address_id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 7
-  DEFAULT CHARSET = utf8
-  ROW_FORMAT = COMPACT;
+    `id`          bigint(20) unsigned NOT NULL AUTO_INCREMENT comment '主键',
+    `user_id`     bigint(20)          not null comment '用户id',
+    `user_name`   varchar(255)        not null DEFAULT '' comment '用户名',
+    `tel`         varchar(255)        not null DEFAULT '' comment '电话',
+    `street_name` varchar(255)        not null DEFAULT '' comment '街道名称',
+    `is_default`  tinyint(1)          not null DEFAULT 0 comment '是否是默认地址 1表示是 0表示不是',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB comment '地址表';
 
 -- ----------------------------
--- Records of tb_address
+-- Records of address
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_address`
+INSERT INTO `address`
 VALUES (3, 63, 'test', '18782059038', '四川省成都市青羊区百花中心站对面', 1);
-INSERT INTO `tb_address`
+INSERT INTO `address`
 VALUES (5, 63, 'admin', '18782059038', '上海青浦区汇联路', 0);
-INSERT INTO `tb_address`
+INSERT INTO `address`
 VALUES (6, 62, 'Mic', '18073804421', '湖南省长沙市麓谷企业广场A3栋3单元407', 0);
 COMMIT;
 
@@ -565,12 +561,12 @@ CREATE TABLE if not exists `member`
     `update_time` datetime            not null default current_timestamp on update current_timestamp comment '更新时间',
     `sex`         varchar(2)          not null DEFAULT '' comment '性别',
     `address`     varchar(255)        not null DEFAULT '' comment '地址',
-    `state`       int(1)              not null DEFAULT '0' comment '状态 0表示不可用 1表示可用',
-    `file`        varchar(255)        not null DEFAULT '' COMMENT '头像',
+    `enabled`     tinyint(1)          not null DEFAULT '0' comment '可用状态 0表示不可用 1表示可用',
+    `avatar_file` varchar(255)        not null DEFAULT '' COMMENT '头像 头像文件的地址',
     `description` varchar(500)        not null DEFAULT '' comment '描述',
     `points`      int(11)             not null DEFAULT '0' COMMENT '积分',
     `balance`     decimal(10, 2)      not null DEFAULT '0.00' COMMENT '余额',
-    `is_verified` varchar(1)          not null DEFAULT 'N' comment '管理员已确认 Y表示已激活 N表示未激活',
+    `is_verified` tinyint(1)          not null DEFAULT 0 comment '管理员已确认 1表示已激活 0表示未激活',
     PRIMARY KEY (`id`),
     UNIQUE KEY `userName` (`user_name`) USING BTREE,
     UNIQUE KEY `phone` (`phone`) USING BTREE,
@@ -585,11 +581,11 @@ BEGIN;
 INSERT INTO `member`
 VALUES (62, 'test', '098f6bcd4621d373cade4e832627b4f6', '139', 'qq', '2017-09-05 21:27:54', '2017-10-08 18:13:51', '',
         '', 1, 'https://gper.club/server-img/avatars/000/00/00/user_origin_30.jpg?time1565591384242', '', 20,
-        22.2, 'N');
+        22.2, 0);
 INSERT INTO `member`
 VALUES (66, 'mic', '4eea1e5de59fbc61cb3ab480dbbf6a5f', '181', '163', '2019-08-06 00:15:48', '2019-08-06 00:15:48', '',
         '', 1, 'https://gper.club/server-img/avatars/000/00/00/user_origin_30.jpg?time1565591384242', '', 19,
-        11.1, 'N');
+        11.1, 0);
 COMMIT;
 
 -- ----------------------------
@@ -985,7 +981,7 @@ CREATE TABLE if not exists `user_verify`
     `user_name`     varchar(56)         not null DEFAULT '' comment '用户名',
     `register_date` datetime            not null DEFAULT current_timestamp comment '注册日期',
     `uuid`          varchar(56)         not null DEFAULT '' comment 'uuid 注册时生成唯一序号',
-    `is_verify`     varchar(1)          not null DEFAULT '' COMMENT '注册信息是否验证成功：Y已验证，N未验证',
-    `is_expire`     varchar(1)          not null DEFAULT '' COMMENT '注册信息是否过期：Y已过期，N未过期',
+    `is_verify`     tinyint(1)          not null DEFAULT '' COMMENT '注册信息是否验证成功：1已验证，0未验证',
+    `is_expire`     tinyint(1)          not null DEFAULT '' COMMENT '注册信息是否过期：1已过期，0未过期',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB comment '用户验证表';

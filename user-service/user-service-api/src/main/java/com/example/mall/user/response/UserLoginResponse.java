@@ -22,7 +22,7 @@ public class UserLoginResponse extends AbstractResponse {
     /**
      * 主键
      */
-    private Long id;
+    private Long userId;
 
     /**
      * 用户名
@@ -50,14 +50,14 @@ public class UserLoginResponse extends AbstractResponse {
     private String address;
 
     /**
-     * 状态
+     * 可用状态 0表示不可用 1表示可用
      */
-    private Integer state;
+    private Boolean enabled;
 
     /**
      * 头像
      */
-    private String file;
+    private String avatarFile;
 
     /**
      * 描述
@@ -73,4 +73,9 @@ public class UserLoginResponse extends AbstractResponse {
      * 余额
      */
     private BigDecimal balance;
+
+    /**
+     * token
+     */
+    private String token;
 }

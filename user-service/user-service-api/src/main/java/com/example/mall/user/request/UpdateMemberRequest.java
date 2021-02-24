@@ -25,7 +25,7 @@ public class UpdateMemberRequest extends AbstractRequest {
      */
     @NotNull(message = "用户id不能为空")
     @Min(value = 1, message = "用户id无效")
-    private Long id;
+    private Long userId;
 
     /**
      * 注册手机号
@@ -50,7 +50,7 @@ public class UpdateMemberRequest extends AbstractRequest {
     /**
      * 头像
      */
-    private String file;
+    private String avatarFile;
 
     /**
      * 描述
@@ -67,5 +67,8 @@ public class UpdateMemberRequest extends AbstractRequest {
      */
     private BigDecimal balance;
 
+    /**
+     * token
+     */
     private String token;
 }

@@ -86,16 +86,16 @@ public class Member implements Serializable {
     private String address;
 
     /**
-     * 状态
+     * 可用状态 0表示不可用 1表示可用
      */
-    @TableField(value = "state")
-    private Integer state;
+    @TableField(value = "enabled")
+    private Integer enabled;
 
     /**
      * 头像
      */
-    @TableField(value = "file")
-    private String file;
+    @TableField(value = "avatar_file")
+    private String avatarFile;
 
     /**
      * 描述
@@ -116,8 +116,8 @@ public class Member implements Serializable {
     private BigDecimal balance;
 
     /**
-     * 激活
+     * 管理员已确认 1表示已激活 0表示未激活
      */
     @TableField(value = "is_verified")
-    private String isVerified;
+    private Boolean isVerified;
 }

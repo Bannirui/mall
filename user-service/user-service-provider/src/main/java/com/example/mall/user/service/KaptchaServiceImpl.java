@@ -1,8 +1,21 @@
 package com.example.mall.user.service;
 
+import com.example.mall.user.annotation.ResponseExceptionHandler;
+import com.example.mall.user.constant.SysRetCodeEnum;
+import com.example.mall.user.dto.ImageResult;
 import com.example.mall.user.request.KaptchaCodeRequest;
 import com.example.mall.user.response.KaptchaCodeResponse;
+import com.example.mall.user.utils.VerifyCodeUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  *@author dingrui
@@ -11,6 +24,12 @@ import org.apache.dubbo.config.annotation.DubboService;
  */
 @DubboService
 public class KaptchaServiceImpl implements IKaptchaService {
+
+    private final String KAPTCHA_UUID = "kaptcha_uuid";
+
+    @Autowired
+    ValueOperations<String, String> valueOperations;
+
     /**
      * @author dingrui
      * @date 2021/2/21
@@ -20,7 +39,21 @@ public class KaptchaServiceImpl implements IKaptchaService {
      */
     @Override
     public KaptchaCodeResponse getKaptchaCode(KaptchaCodeRequest request) {
-        return null;
+        KaptchaCodeResponse response = new KaptchaCodeResponse();
+        try {
+            ImageResult imageResult = VerifyCodeUtil.genVerifyCode(140, 43, 4);
+            String uuid = UUID.randomUUID().toString();
+            // 将验证码附带uuid唯一值 存到redis key=kaptcha_uuid+uuid value=验证码 过期时间60s
+            valueOperations.set(KAPTCHA_UUID + uuid, imageResult.getCode(), 60, TimeUnit.SECONDS);
+            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setImageCode(imageResult.getCode());
+            response.setUuid(uuid);
+        } catch (IOException e) {
+            response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
+            response.setMsg(SysRetCodeEnum.SYSTEM_ERROR.getMsg());
+        }
+        return response;
     }
 
     /**
@@ -29,9 +62,25 @@ public class KaptchaServiceImpl implements IKaptchaService {
      * @param request
      * @return
      * @description 验证图形验证码
+     * 客户端存储着生成验证码时的uuid
+     * 根据客户端uuid取redis中找缓存的验证码
+     * 比较客户端的验证码和redis中的验证码
      */
+    @ResponseExceptionHandler(returnType = KaptchaCodeResponse.class)
     @Override
-    public KaptchaCodeResponse validateKaptchaCode(KaptchaCodeRequest request) {
-        return null;
+    public KaptchaCodeResponse validateKaptchaCode(@NotNull @Validated KaptchaCodeRequest request) {
+        KaptchaCodeResponse kaptchaCodeResponse = new KaptchaCodeResponse();
+        // redis中key
+        String redisKey = KAPTCHA_UUID + request.getUuid();
+        // 从redis中取出value
+        String code = valueOperations.get(redisKey);
+        if (StringUtils.isNotBlank(code) && request.getCode().equalsIgnoreCase(code)) {
+            kaptchaCodeResponse.setCode(SysRetCodeEnum.SUCCESS.getCode());
+            kaptchaCodeResponse.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            return kaptchaCodeResponse;
+        }
+        kaptchaCodeResponse.setCode(SysRetCodeEnum.KAPTCHA_CODE_ERROR.getCode());
+        kaptchaCodeResponse.setMsg(SysRetCodeEnum.KAPTCHA_CODE_ERROR.getMsg());
+        return kaptchaCodeResponse;
     }
 }

@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
 public class AvatarUpdateRequest extends AbstractRequest {
     private static final long serialVersionUID = 8996509167311477748L;
 
@@ -32,5 +30,5 @@ public class AvatarUpdateRequest extends AbstractRequest {
      */
     @NotNull(message = "头像地址不能为空")
     @NotBlank(message = "头像地址不能为空")
-    private String imageData;
+    private String avatarFile;
 }

@@ -14,8 +14,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
 public class QueryMemberRequest extends AbstractRequest {
 
     private static final long serialVersionUID = -3576974375078645268L;

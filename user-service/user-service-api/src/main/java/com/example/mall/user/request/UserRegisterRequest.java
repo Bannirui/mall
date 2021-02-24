@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserRegisterRequest extends AbstractRequest {
     private static final long serialVersionUID = 9106926018872930795L;
 

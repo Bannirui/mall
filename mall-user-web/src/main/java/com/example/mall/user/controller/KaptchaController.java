@@ -28,6 +28,13 @@ public class KaptchaController {
     @DubboReference(timeout = 3000, check = false)
     private IKaptchaService iKaptchaService;
 
+    /**
+     * @author dingrui
+     * @date 2021/2/22
+     * @param response
+     * @return
+     * @description 获取验证码
+     */
     @Anoymous
     @GetMapping("/kaptcha")
     public ResponseData<Object> getKaptchaCode(HttpServletResponse response) {
@@ -43,9 +50,18 @@ public class KaptchaController {
         return ResponseData.success(kaptchaCodeResponse.getImageCode());
     }
 
+    /**
+     * @author dingrui
+     * @date 2021/2/22
+     * @param code
+     * @param httpServletRequest
+     * @return
+     * @description 验证码校验
+     */
     @Anoymous
     @PostMapping("/kaptcha")
     public ResponseData<Object> validKaptcha(@RequestBody @NotNull(message = "验证码不能为空") @NotBlank(message = "验证码不能为空") String code, HttpServletRequest httpServletRequest) {
+        // 生成验证码时的uuid
         String uuid = CookieUtil.getCookieValue(httpServletRequest, "kaptcha_uuid");
         KaptchaCodeRequest kaptchaCodeRequest = new KaptchaCodeRequest();
         kaptchaCodeRequest.setUuid(uuid);

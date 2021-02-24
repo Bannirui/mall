@@ -25,6 +25,9 @@ public interface IKaptchaService {
      * @param request
      * @return
      * @description 验证图形验证码
+     * 客户端存储着生成验证码时的uuid
+     * 根据客户端uuid取redis中找缓存的验证码
+     * 比较客户端的验证码和redis中的验证码
      */
     KaptchaCodeResponse validateKaptchaCode(KaptchaCodeRequest request);
 }
