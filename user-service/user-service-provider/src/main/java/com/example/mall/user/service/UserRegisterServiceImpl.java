@@ -1,7 +1,7 @@
 package com.example.mall.user.service;
 
-import com.example.mall.user.annotation.ResponseExceptionHandler;
-import com.example.mall.user.constant.SysRetCodeEnum;
+import com.example.mall.common.constant.BaseRetCodeEnum;
+import com.example.mall.common.constant.UserRetCodeEnum;
 import com.example.mall.user.dal.model.Member;
 import com.example.mall.user.dal.model.UserVerify;
 import com.example.mall.user.dal.service.MemberDalService;
@@ -41,7 +41,6 @@ public class UserRegisterServiceImpl implements IUserRegisterService {
      * @description 用户注册
      */
     @Override
-    @ResponseExceptionHandler(returnType = UserRegisterResponse.class)
     public UserRegisterResponse register(UserRegisterRequest request) {
         UserRegisterResponse response = new UserRegisterResponse();
         Member member = Member.builder()
@@ -55,8 +54,8 @@ public class UserRegisterServiceImpl implements IUserRegisterService {
         // 插入用户表
         if (!memberDalService.save(member)) {
             // 注册失败
-            response.setCode(SysRetCodeEnum.USER_REGISTER_FAILED.getCode());
-            response.setMsg(SysRetCodeEnum.USER_REGISTER_FAILED.getMsg());
+            response.setCode(UserRetCodeEnum.USER_REGISTER_FAILED.getCode());
+            response.setMsg(UserRetCodeEnum.USER_REGISTER_FAILED.getMsg());
             return response;
         }
         // 插入用户验证表
@@ -70,12 +69,12 @@ public class UserRegisterServiceImpl implements IUserRegisterService {
                 .build();
         if (userVerifyDalService.save(userVerify)) {
             // 认证失败
-            response.setCode(SysRetCodeEnum.USER_REGISTER_VERIFY_FAILED.getCode());
-            response.setMsg(SysRetCodeEnum.USER_REGISTER_VERIFY_FAILED.getMsg());
+            response.setCode(UserRetCodeEnum.USER_REGISTER_VERIFY_FAILED.getCode());
+            response.setMsg(UserRetCodeEnum.USER_REGISTER_VERIFY_FAILED.getMsg());
             return response;
         }
-        response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
-        response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+        response.setCode(BaseRetCodeEnum.SYSTEM_ERROR.getCode());
+        response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         // 消息发送kafka
         kafkaProducer.sendMsg(UserVerifyMsgDTO.builder().userName(userVerify.getUserName()).uuid(userVerify.getUuid()).email(member.getEmail()).build());
         return response;

@@ -1,15 +1,16 @@
-package com.example.mall.user.aop;
+package com.example.mall.common.aop;
 
+import com.example.mall.common.annotation.ResponseExceptionHandler;
+import com.example.mall.common.constant.BaseRetCodeEnum;
 import com.example.mall.common.response.AbstractResponse;
-import com.example.mall.user.annotation.ResponseExceptionHandler;
-import com.example.mall.user.constant.SysRetCodeEnum;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ValidationException;
+import javax.xml.bind.ValidationException;
+
 
 /**
  *@author dingrui
@@ -26,7 +27,7 @@ public class HandleResponseException {
      * @return
      * @description 定义切面
      */
-    @Pointcut(value = "@annotation(com.example.mall.user.annotation.ResponseExceptionHandler)")
+    @Pointcut(value = "@annotation(com.example.mall.common.annotation.ResponseExceptionHandler)")
     public void pointCut() {
     }
 
@@ -34,16 +35,16 @@ public class HandleResponseException {
      * @author dingrui
      * @date 2021/2/21
      * @param pjp 方法
-     * @param responseExceptionHandler 自定义注解
+     * @param annotation 自定义注解
      * @return 方法执行异常返回自定义response
      * @description 环绕通知
      */
-    @Around("pointCut() && @annotation(responseExceptionHandler)")
-    public Object around(ProceedingJoinPoint pjp, ResponseExceptionHandler responseExceptionHandler) {
+    @Around("pointCut() && @annotation(annotation)")
+    public Object around(ProceedingJoinPoint pjp, ResponseExceptionHandler annotation) {
         Object result = null;
         AbstractResponse response = null;
         try {
-            response = responseExceptionHandler.returnType().getDeclaredConstructor().newInstance();
+            response = annotation.returnType().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             return result;
         }
@@ -51,12 +52,12 @@ public class HandleResponseException {
         try {
             result = pjp.proceed();
         } catch (ValidationException e) {
-            response.setCode(SysRetCodeEnum.REQUEST_CHECK_FAILURE.getCode());
-            response.setMsg(SysRetCodeEnum.REQUEST_CHECK_FAILURE.getMessage());
+            response.setCode(BaseRetCodeEnum.REQUEST_CHECK_FAILURE.getCode());
+            response.setMsg(BaseRetCodeEnum.REQUEST_CHECK_FAILURE.getMsg());
             return response;
         } catch (Throwable e) {
-            response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
-            response.setMsg(SysRetCodeEnum.SYSTEM_ERROR.getMessage());
+            response.setCode(BaseRetCodeEnum.SYSTEM_ERROR.getCode());
+            response.setMsg(BaseRetCodeEnum.SYSTEM_ERROR.getMsg());
             return response;
         }
         return result;

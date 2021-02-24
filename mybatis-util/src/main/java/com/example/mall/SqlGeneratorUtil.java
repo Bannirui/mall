@@ -58,7 +58,7 @@ public class SqlGeneratorUtil {
         strategy.setSuperServiceClass("");
         strategy.setSuperServiceImplClass("");
         strategy.setSuperMapperClass("");
-        strategy.setInclude("address".split(","));
+        strategy.setInclude("comment,comment_picture,comment_reply".split(","));
 
         mpg.setStrategy(strategy);
 

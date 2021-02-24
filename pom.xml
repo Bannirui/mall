@@ -38,6 +38,7 @@
         <module>mall-common</module>
         <module>mybatis-util</module>
         <module>mall-user-web</module>
+        <module>comment-service</module>
     </modules>
 
     <licenses>

@@ -2,10 +2,10 @@ package com.example.mall.user.service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.mall.common.constant.BaseRetCodeEnum;
+import com.example.mall.common.constant.UserRetCodeEnum;
 import com.example.mall.common.exception.ProcessException;
 import com.example.mall.common.exception.ValidateException;
-import com.example.mall.user.annotation.ResponseExceptionHandler;
-import com.example.mall.user.constant.SysRetCodeEnum;
 import com.example.mall.user.converter.UserConverter;
 import com.example.mall.user.dal.model.Member;
 import com.example.mall.user.dal.service.MemberDalService;
@@ -46,27 +46,26 @@ public class UserLoginServiceImpl implements IUserLoginService {
      * @description 用户登陆
      */
     @Override
-    @ResponseExceptionHandler(returnType = UserLoginResponse.class)
     public UserLoginResponse login(@NotNull @Validated UserLoginRequest request) {
         UserLoginResponse response = new UserLoginResponse();
         // 用户登陆前 验证是否存在该用户
         List<Member> members = memberDalService.list(new LambdaQueryWrapper<Member>().eq(Member::getEnabled, 1).eq(Member::getUserName, request.getUserName()));
         if (members.isEmpty()) {
-            response.setCode(SysRetCodeEnum.USER_OR_PASSWORD_ERRROR.getCode());
-            response.setMsg(SysRetCodeEnum.USER_OR_PASSWORD_ERRROR.getMsg());
+            response.setCode(UserRetCodeEnum.USER_OR_PASSWORD_ERRROR.getCode());
+            response.setMsg(UserRetCodeEnum.USER_OR_PASSWORD_ERRROR.getMsg());
             return response;
         }
         Member member;
         // 是否已经激活
         if (!(member = members.get(0)).getIsVerified()) {
-            response.setCode(SysRetCodeEnum.USER_OR_PASSWORD_ERRROR.getCode());
-            response.setMsg(SysRetCodeEnum.USER_OR_PASSWORD_ERRROR.getMsg());
+            response.setCode(UserRetCodeEnum.USER_OR_PASSWORD_ERRROR.getCode());
+            response.setMsg(UserRetCodeEnum.USER_OR_PASSWORD_ERRROR.getMsg());
             return response;
         }
         // 存在已经激活用户 验证密码
         if (!DigestUtils.md5DigestAsHex(request.getPassword().getBytes()).equals(member.getPassword())) {
-            response.setCode(SysRetCodeEnum.USER_OR_PASSWORD_ERRROR.getCode());
-            response.setMsg(SysRetCodeEnum.USER_OR_PASSWORD_ERRROR.getMsg());
+            response.setCode(UserRetCodeEnum.USER_OR_PASSWORD_ERRROR.getCode());
+            response.setMsg(UserRetCodeEnum.USER_OR_PASSWORD_ERRROR.getMsg());
             return response;
         }
         // 验证通过 可以登陆
@@ -77,11 +76,11 @@ public class UserLoginServiceImpl implements IUserLoginService {
         try {
             token = JwtTokenUtil.builder().msg(JSON.toJSONString(map)).build().creatJwtToken();
         } catch (Exception e) {
-            throw new ProcessException(SysRetCodeEnum.SYSTEM_ERROR.getCode(), SysRetCodeEnum.SYSTEM_ERROR.getMsg(), e);
+            throw new ProcessException(BaseRetCodeEnum.SYSTEM_ERROR.getCode(), BaseRetCodeEnum.SYSTEM_ERROR.getMsg(), e);
         }
         response = converter.model2Response(member);
-        response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-        response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+        response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+        response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         response.setToken(token);
         return response;
     }
@@ -102,15 +101,15 @@ public class UserLoginServiceImpl implements IUserLoginService {
         } catch (ValidateException e) {
             throw new ProcessException(e.getCode(), e.getMsg());
         } catch (Exception e) {
-            throw new ProcessException(SysRetCodeEnum.SYSTEM_ERROR.getCode(), SysRetCodeEnum.SYSTEM_ERROR.getMsg(), e);
+            throw new ProcessException(BaseRetCodeEnum.SYSTEM_ERROR.getCode(), BaseRetCodeEnum.SYSTEM_ERROR.getMsg(), e);
         }
         if (StringUtils.isNotBlank(tokenDecode)) {
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
             response.setUserInfo(tokenDecode);
         } else {
-            response.setCode(SysRetCodeEnum.TOKEN_VALID_FAILED.getCode());
-            response.setMsg(SysRetCodeEnum.TOKEN_VALID_FAILED.getMsg());
+            response.setCode(UserRetCodeEnum.TOKEN_VALID_FAILED.getCode());
+            response.setMsg(UserRetCodeEnum.TOKEN_VALID_FAILED.getMsg());
         }
         return response;
     }

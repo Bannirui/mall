@@ -80,65 +80,62 @@ VALUES (1, 'GPMALL后台管理系统 v1.0', 'GPMALL后台管理系统 v1.0,GPMAL
 COMMIT;
 
 -- ----------------------------
--- Table structure for tb_comment
+-- Table structure for comment
 -- ----------------------------
-DROP TABLE IF EXISTS `tb_comment`;
-CREATE TABLE `tb_comment`
+CREATE TABLE if not exists `comment`
 (
-    `id`                    varchar(50) NOT NULL COMMENT '商品评论主键',
-    `order_id`              varchar(50) NOT NULL COMMENT '订单id',
-    `item_id`               bigint(20)  NOT NULL COMMENT '商品id',
-    `star`                  tinyint(4)   DEFAULT '5' COMMENT '星级',
-    `type`                  tinyint(4)   DEFAULT '1' COMMENT '类型: 1好评 2中评 3差评',
-    `is_anoymous`           bit(1)       DEFAULT b'0' COMMENT '是否匿名评价',
-    `content`               varchar(512) DEFAULT '' COMMENT '评价内容',
-    `buyer_nick`            varchar(50)  DEFAULT NULL COMMENT '买家昵称',
-    `comment_time`          datetime     DEFAULT CURRENT_TIMESTAMP COMMENT '评价时间',
-    `is_public`             bit(1)       DEFAULT b'1' COMMENT '是否公开',
-    `is_valid`              bit(1)       DEFAULT b'0' COMMENT '是否通过审核',
-    `validation_user_id`    bigint(20)   DEFAULT NULL COMMENT '审核人id',
-    `validation_time`       datetime     DEFAULT NULL COMMENT '审核时间',
-    `validation_suggestion` varchar(512) DEFAULT NULL COMMENT '审核意见',
-    `is_top`                bit(1)       DEFAULT b'0' COMMENT '是否置顶',
-    `user_id`               bigint(20)  NOT NULL COMMENT '评论用户id',
-    `is_deleted`            bit(1)       DEFAULT b'0' COMMENT '是否删除',
-    `deletion_time`         datetime     DEFAULT NULL COMMENT '删除时间',
-    `deletion_user_id`      bigint(20)   DEFAULT NULL COMMENT '删除用户id',
+    `id`                    bigint(20) unsigned NOT NULL auto_increment COMMENT '商品评论主键',
+    `order_id`              bigint(20) unsigned NOT NULL COMMENT '订单id',
+    `product_id`            bigint(20) unsigned NOT NULL COMMENT '商品id',
+    `star`                  tinyint(4)                   DEFAULT '5' COMMENT '星级',
+    `type`                  tinyint(4)                   DEFAULT '1' COMMENT '类型: 1好评 2中评 3差评',
+    `is_anoymous`           tinyint(1)          not null DEFAULT '0' COMMENT '是否匿名评价 0表示不是 1表示是',
+    `content`               varchar(512)        not null DEFAULT '' COMMENT '评价内容',
+    `buyer_nick`            varchar(50)         not null DEFAULT '' COMMENT '买家昵称',
+    `comment_time`          datetime            not null DEFAULT CURRENT_TIMESTAMP COMMENT '评价时间',
+    `is_public`             tinyint(1) unsigned not null DEFAULT '1' COMMENT '是否公开 1表示公开 0表示不公开',
+    `is_valid`              tinyint(1) unsigned not null DEFAULT '0' COMMENT '是否通过审核',
+    `validation_user_id`    bigint(20)          null     default null COMMENT '审核人id',
+    `validation_time`       datetime            null     DEFAULT NULL COMMENT '审核时间',
+    `validation_suggestion` varchar(512)        null     DEFAULT NULL COMMENT '审核意见',
+    `is_top`                tinyint(1)          not null DEFAULT '0' COMMENT '是否置顶 0表示不置顶 1表示置顶',
+    `user_id`               bigint(20) unsigned NOT NULL COMMENT '评论用户id',
+    `is_deleted`            bit(1)              not null DEFAULT b'0' COMMENT '是否删除 0表示不删除 1表示删除',
+    `deletion_time`         datetime            null     DEFAULT NULL COMMENT '删除时间',
+    `deletion_user_id`      bigint(20)          null     DEFAULT NULL COMMENT '删除用户id',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   ROW_FORMAT = DYNAMIC COMMENT ='商品评价表';
 
 -- ----------------------------
--- Table structure for tb_comment_picture
+-- Table structure for comment_picture
 -- ----------------------------
-DROP TABLE IF EXISTS `tb_comment_picture`;
-CREATE TABLE `tb_comment_picture`
+CREATE TABLE if not exists `comment_picture`
 (
-    `id`         varchar(50) NOT NULL COMMENT '商品评价图片id',
-    `comment_id` varchar(50) NOT NULL COMMENT '商品评价id',
-    `pic_path`   varchar(50) NOT NULL COMMENT '图片路径',
+    `id`         bigint(20) unsigned NOT NULL auto_increment COMMENT '商品评价图片id',
+    `comment_id` bigint(20) unsigned NOT NULL COMMENT '商品评价id',
+    `pic_path`   varchar(50)         NOT NULL default '' COMMENT '图片路径',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   ROW_FORMAT = DYNAMIC COMMENT ='商品评价图片表';
 
 -- ----------------------------
--- Table structure for tb_comment_reply
+-- Table structure for comment_reply
 -- ----------------------------
-DROP TABLE IF EXISTS `tb_comment_reply`;
-CREATE TABLE `tb_comment_reply`
+CREATE TABLE if not exists `comment_reply`
 (
-    `id`               varchar(50) NOT NULL COMMENT '评价回复id',
-    `comment_id`       varchar(50)  DEFAULT NULL COMMENT '商品评价id',
-    `parent_id`        varchar(50)  DEFAULT NULL COMMENT '评价回复自关联id(针对回复的回复)',
-    `content`          varchar(256) DEFAULT NULL COMMENT '回复意见',
-    `reply_time`       datetime     DEFAULT NULL COMMENT '回复时间',
-    `reply_nick`       varchar(50)  DEFAULT NULL COMMENT '回复人昵称',
-    `user_id`          bigint(20)  NOT NULL COMMENT '回复人用户id',
-    `is_deleted`       bit(1)       DEFAULT b'0' COMMENT '是否删除',
-    `deletion_time`    datetime     DEFAULT NULL COMMENT '删除时间',
-    `deletion_user_id` bigint(20)   DEFAULT NULL COMMENT '删除用户id',
+    `id`               bigint(20) unsigned NOT NULL auto_increment COMMENT '评价回复id',
+    `comment_id`       bigint(20) unsigned not null COMMENT '商品评价id',
+    `parent_id`        bigint(20)                   DEFAULT NULL COMMENT '评价回复自关联id(针对回复的回复)',
+    `content`          varchar(256)                 DEFAULT NULL COMMENT '回复意见',
+    `reply_time`       datetime            null     DEFAULT NULL COMMENT '回复时间',
+    `reply_nick`       varchar(50)         not null DEFAULT '' COMMENT '回复人昵称',
+    `user_id`          bigint(20) unsigned NOT NULL COMMENT '回复人用户id',
+    `is_deleted`       bit(1)              not null DEFAULT b'0' COMMENT '是否删除 0未删除 1已删除',
+    `deletion_time`    datetime            null     DEFAULT NULL COMMENT '删除时间',
+    `deletion_user_id` bigint(20) unsigned null     DEFAULT NULL COMMENT '删除用户id',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8

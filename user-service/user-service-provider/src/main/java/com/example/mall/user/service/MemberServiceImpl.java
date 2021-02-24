@@ -1,7 +1,7 @@
 package com.example.mall.user.service;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.example.mall.user.constant.SysRetCodeEnum;
+import com.example.mall.common.constant.BaseRetCodeEnum;
 import com.example.mall.user.converter.MemberConverter;
 import com.example.mall.user.dal.model.Member;
 import com.example.mall.user.dal.service.MemberDalService;
@@ -45,12 +45,12 @@ public class MemberServiceImpl implements IMemberService {
         QueryMemberResponse response = new QueryMemberResponse();
         Member member = memberDalService.getById(request.getUserId());
         if (null == member) {
-            response.setCode(SysRetCodeEnum.DATA_NOT_EXIST.getCode());
-            response.setMsg(SysRetCodeEnum.DATA_NOT_EXIST.getMsg());
+            response.setCode(BaseRetCodeEnum.DATA_NOT_EXIST.getCode());
+            response.setMsg(BaseRetCodeEnum.DATA_NOT_EXIST.getMsg());
         } else {
             response = converter.model2Response(member);
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         }
         return response;
     }
@@ -66,11 +66,11 @@ public class MemberServiceImpl implements IMemberService {
     public AvatarUpdateResponse updateAvatar(AvatarUpdateRequest request) {
         AvatarUpdateResponse response = new AvatarUpdateResponse();
         if (memberDalService.update(new LambdaUpdateWrapper<Member>().eq(Member::getId, request.getUserId()).set(Member::getAvatarFile, request.getAvatarFile()))) {
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         } else {
-            response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
-            response.setMsg(SysRetCodeEnum.SYSTEM_ERROR.getMsg());
+            response.setCode(BaseRetCodeEnum.SYSTEM_ERROR.getCode());
+            response.setMsg(BaseRetCodeEnum.SYSTEM_ERROR.getMsg());
         }
         return response;
     }
@@ -88,19 +88,19 @@ public class MemberServiceImpl implements IMemberService {
         CheckAuthRequest checkAuthRequest = new CheckAuthRequest();
         checkAuthRequest.setToken(request.getToken());
         CheckAuthResponse checkAuthResponse = iUserLoginService.validToken(checkAuthRequest);
-        if (!SysRetCodeEnum.SUCCESS.getCode().equals(checkAuthResponse.getCode())) {
+        if (!BaseRetCodeEnum.SUCCESS.getCode().equals(checkAuthResponse.getCode())) {
             response.setCode(checkAuthResponse.getCode());
             response.setMsg(checkAuthResponse.getMsg());
             return response;
         }
         Member member = converter.request2Model(request);
         if (memberDalService.updateById(member)) {
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
             return response;
         }
-        response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
-        response.setMsg(SysRetCodeEnum.SYSTEM_ERROR.getMsg());
+        response.setCode(BaseRetCodeEnum.SYSTEM_ERROR.getCode());
+        response.setMsg(BaseRetCodeEnum.SYSTEM_ERROR.getMsg());
         return response;
     }
 }

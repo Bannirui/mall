@@ -1,7 +1,8 @@
 package com.example.mall.user.service;
 
-import com.example.mall.user.annotation.ResponseExceptionHandler;
-import com.example.mall.user.constant.SysRetCodeEnum;
+import com.example.mall.common.annotation.ResponseExceptionHandler;
+import com.example.mall.common.constant.BaseRetCodeEnum;
+import com.example.mall.common.constant.UserRetCodeEnum;
 import com.example.mall.user.dto.ImageResult;
 import com.example.mall.user.request.KaptchaCodeRequest;
 import com.example.mall.user.response.KaptchaCodeResponse;
@@ -45,13 +46,13 @@ public class KaptchaServiceImpl implements IKaptchaService {
             String uuid = UUID.randomUUID().toString();
             // 将验证码附带uuid唯一值 存到redis key=kaptcha_uuid+uuid value=验证码 过期时间60s
             valueOperations.set(KAPTCHA_UUID + uuid, imageResult.getCode(), 60, TimeUnit.SECONDS);
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
             response.setImageCode(imageResult.getCode());
             response.setUuid(uuid);
         } catch (IOException e) {
-            response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
-            response.setMsg(SysRetCodeEnum.SYSTEM_ERROR.getMsg());
+            response.setCode(BaseRetCodeEnum.SYSTEM_ERROR.getCode());
+            response.setMsg(BaseRetCodeEnum.SYSTEM_ERROR.getMsg());
         }
         return response;
     }
@@ -75,12 +76,12 @@ public class KaptchaServiceImpl implements IKaptchaService {
         // 从redis中取出value
         String code = valueOperations.get(redisKey);
         if (StringUtils.isNotBlank(code) && request.getCode().equalsIgnoreCase(code)) {
-            kaptchaCodeResponse.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            kaptchaCodeResponse.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            kaptchaCodeResponse.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            kaptchaCodeResponse.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
             return kaptchaCodeResponse;
         }
-        kaptchaCodeResponse.setCode(SysRetCodeEnum.KAPTCHA_CODE_ERROR.getCode());
-        kaptchaCodeResponse.setMsg(SysRetCodeEnum.KAPTCHA_CODE_ERROR.getMsg());
+        kaptchaCodeResponse.setCode(UserRetCodeEnum.KAPTCHA_CODE_ERROR.getCode());
+        kaptchaCodeResponse.setMsg(UserRetCodeEnum.KAPTCHA_CODE_ERROR.getMsg());
         return kaptchaCodeResponse;
     }
 }

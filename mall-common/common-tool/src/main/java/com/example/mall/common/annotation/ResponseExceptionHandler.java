@@ -1,4 +1,4 @@
-package com.example.mall.user.annotation;
+package com.example.mall.common.annotation;
 
 import com.example.mall.common.response.AbstractResponse;
 

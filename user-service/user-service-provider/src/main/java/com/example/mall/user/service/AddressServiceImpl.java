@@ -1,7 +1,7 @@
 package com.example.mall.user.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.mall.user.constant.SysRetCodeEnum;
+import com.example.mall.common.constant.BaseRetCodeEnum;
 import com.example.mall.user.converter.AddressConverter;
 import com.example.mall.user.dal.model.Address;
 import com.example.mall.user.dal.service.AddressDalService;
@@ -39,11 +39,11 @@ public class AddressServiceImpl implements IAddressService {
         AddAddressResponse response = new AddAddressResponse();
         Address address = converter.request2Model(request);
         if (addressDalService.save(address)) {
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         } else {
-            response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
-            response.setMsg(SysRetCodeEnum.SYSTEM_ERROR.getMsg());
+            response.setCode(BaseRetCodeEnum.SYSTEM_ERROR.getCode());
+            response.setMsg(BaseRetCodeEnum.SYSTEM_ERROR.getMsg());
         }
         return response;
     }
@@ -59,11 +59,11 @@ public class AddressServiceImpl implements IAddressService {
     public DeleteAddressResponse deleteAddress(DeleteAddressRequest request) {
         DeleteAddressResponse response = new DeleteAddressResponse();
         if (addressDalService.removeById(request.getAddressId())) {
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         } else {
-            response.setCode(SysRetCodeEnum.DATA_NOT_EXIST.getCode());
-            response.setMsg(SysRetCodeEnum.DATA_NOT_EXIST.getMsg());
+            response.setCode(BaseRetCodeEnum.DATA_NOT_EXIST.getCode());
+            response.setMsg(BaseRetCodeEnum.DATA_NOT_EXIST.getMsg());
         }
         return response;
     }
@@ -80,11 +80,11 @@ public class AddressServiceImpl implements IAddressService {
         UpdateAddressResponse response = new UpdateAddressResponse();
         Address address = converter.request2Model(request);
         if (addressDalService.updateById(address)) {
-            response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-            response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+            response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+            response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         } else {
-            response.setCode(SysRetCodeEnum.SYSTEM_ERROR.getCode());
-            response.setMsg(SysRetCodeEnum.SYSTEM_ERROR.getMsg());
+            response.setCode(BaseRetCodeEnum.SYSTEM_ERROR.getCode());
+            response.setMsg(BaseRetCodeEnum.SYSTEM_ERROR.getMsg());
         }
         return response;
     }
@@ -101,8 +101,8 @@ public class AddressServiceImpl implements IAddressService {
         GetAddressResponse response = new GetAddressResponse();
         Address address = addressDalService.getById(request.getAddressId());
         AddressDto addressDto = converter.model2Dto(address);
-        response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-        response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+        response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+        response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         response.setAddressDto(addressDto);
         return response;
     }
@@ -119,8 +119,8 @@ public class AddressServiceImpl implements IAddressService {
         ListAddressResponse response = new ListAddressResponse();
         List<Address> addressList = addressDalService.list(new LambdaQueryWrapper<Address>().eq(Address::getUserId, request.getUserId()));
         List<AddressDto> addressDtoList = converter.modelList2DtoList(addressList);
-        response.setCode(SysRetCodeEnum.SUCCESS.getCode());
-        response.setMsg(SysRetCodeEnum.SUCCESS.getMsg());
+        response.setCode(BaseRetCodeEnum.SUCCESS.getCode());
+        response.setMsg(BaseRetCodeEnum.SUCCESS.getMsg());
         response.setAddressDtos(addressDtoList);
         return response;
     }
